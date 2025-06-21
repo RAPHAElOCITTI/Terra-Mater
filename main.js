@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-            const API_URL = 'https://terra-mater.vercel.app/api'; // Replace with your actual backend URL
+            const API_URL = '/api'; // Replace with your actual backend URL
 
             // --- TESTIMONIALS ---
             function loadTestimonials() {
