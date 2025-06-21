@@ -7,7 +7,7 @@ const app = express();
 const PORT = 3000;
 
 // --- CONFIGURATION ---
-const ADMIN_PASSWORD = "123456"; 
+const ADMIN_PASSWORD = "1234"; 
 const DB_FILE = path.join(__dirname, 'db.json');
 
 // --- MIDDLEWARE ---

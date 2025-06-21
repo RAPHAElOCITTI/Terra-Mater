@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         adminDashboard.classList.add('hidden');
         authToken = null;
         sessionStorage.removeItem('terramater_admin_token');
-        passwordInput.value = '123456'; // Clear password field on logout
+        passwordInput.value = '1234'; // Clear password field on logout
     };
 
     /**
