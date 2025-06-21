@@ -8,7 +8,8 @@ const PORT = process.env.PORT || 3000;
 
 // --- CONFIGURATION ---
 const ADMIN_PASSWORD = "1234"; 
-const DB_FILE = path.join(__dirname, 'db.json');
+// Define the path to db.json at the top
+const dbPath = path.join(process.cwd(), 'db.json');
 
 // --- MIDDLEWARE ---
 app.use(cors());
@@ -16,16 +17,16 @@ app.use(express.json());
 
 // --- DATABASE HELPER ---
 function readDb() {
-    if (!fs.existsSync(DB_FILE)) {
+    if (!fs.existsSync(dbPath)) {
         const initialData = { testimonials: [], blogs: [], faqs: [] };
-        fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2));
+        fs.writeFileSync(dbPath, JSON.stringify(initialData, null, 2));
     }
-    const data = fs.readFileSync(DB_FILE, 'utf-8');
+     const data = fs.readFileSync(dbPath, 'utf8');
     return JSON.parse(data);
 }
 
 function writeDb(data) {
-    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+    fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
 }
 
 // --- PUBLIC API ROUTES ---
