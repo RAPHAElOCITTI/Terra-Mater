@@ -14,7 +14,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- CONFIGURATION ---
-    const API_URL = 'http://localhost:3000/api/admin';
+    const API_URL = '/api/admin';
     let authToken = sessionStorage.getItem('terramater_admin_token');
 
     // --- DOM ELEMENT SELECTORS ---
