@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // --- CONFIGURATION ---
 const ADMIN_PASSWORD = "1234"; 
@@ -125,6 +125,6 @@ createCrudEndpoints('faqs');
 
 // --- START SERVER ---
 app.listen(PORT, () => {
-    console.log(`Server is running on https://terra-mater.vercel.app:${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
     readDb(); // Initialize DB on start if it doesn't exist
 });
