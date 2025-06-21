@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terra Mater - Admin Panel</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div id="login-container">
+        <h2>Admin Login</h2>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit" class="btn">Login</button>
+            <p id="login-status" class="error"></p>
+        </form>
+    </div>
+
+    <div id="admin-dashboard" class="hidden">
+        <header>
+            <h1>Admin Dashboard</h1>
+            <button id="logout-btn" class="btn btn-secondary">Logout</button>
+        </header>
+
+        <section id="testimonials-manager">
+            <h2>Manage Testimonials</h2>
+            <form id="testimonial-form">
+                <input type="hidden" id="testimonial-id">
+                <div class="form-group">
+                    <label for="testimonial-quote">Quote</label>
+                    <textarea id="testimonial-quote" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="testimonial-author">Author (e.g., Sarah M.)</label>
+                    <input type="text" id="testimonial-author" required>
+                </div>
+                <button type="submit" class="btn">Save Testimonial</button>
+            </form>
+            <div id="testimonials-list"></div>
+        </section>
+
+        <section id="blog-manager">
+            <h2>Manage Blog Posts</h2>
+            <form id="blog-form">
+                <input type="hidden" id="blog-id">
+                <div class="form-group">
+                    <label for="blog-title">Post Title</label>
+                    <input type="text" id="blog-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="blog-content">Post Content (HTML allowed)</label>
+                    <textarea id="blog-content" rows="10" required></textarea>
+                </div>
+                <button type="submit" class="btn">Save Post</button>
+            </form>
+            <div id="blogs-list"></div>
+        </section>
+
+        <section id="faq-manager">
+            <h2>Manage FAQs</h2>
+            <form id="faq-form">
+                <input type="hidden" id="faq-id">
+                <div class="form-group">
+                    <label for="faq-question">Question</label>
+                    <input type="text" id="faq-question" required>
+                </div>
+                <div class="form-group">
+                    <label for="faq-answer">Answer</label>
+                    <textarea id="faq-answer" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn">Save FAQ</button>
+            </form>
+            <div id="faqs-list"></div>
+        </section>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

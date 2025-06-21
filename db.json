@@ -1,0 +1,38 @@
+{
+  "testimonials": [
+    {
+      "id": 1750438000875,
+      "quote": "Extremely helpful",
+      "author": "Mama T"
+    },
+    {
+      "id": 1750436881855,
+      "quote": "Highly recommend ",
+      "author": "Sarah M."
+    }
+  ],
+  "blogs": [
+    {
+      "id": 1750469019369,
+      "title": "Community empowerment",
+      "content": "Women in various communities ..."
+    },
+    {
+      "id": 1750436829684,
+      "title": "Individuality",
+      "content": "...."
+    }
+  ],
+  "faqs": [
+    {
+      "id": 1750468982590,
+      "question": "What is a sacred line",
+      "answer": "It comes with one of the packages..."
+    },
+    {
+      "id": 1750430821620,
+      "question": "How long does it take",
+      "answer": "3 - 6 months"
+    }
+  ]
+}

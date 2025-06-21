@@ -1,0 +1,24 @@
+/* Basic Styles */
+body { font-family: sans-serif; background-color: #f4f1ec; background-image: url('../assets/img/background.jpg'); color: #333; padding: 20px; }
+.hidden { display: none; }
+.error { color: #D8000C; }
+.success { color: #4F8A10; }
+
+/* Layout */
+#login-container, #admin-dashboard { max-width: 800px; margin: 40px auto; padding: 30px; background: #fff; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding-bottom: 20px; margin-bottom: 30px; }
+section { margin-bottom: 40px; }
+h1, h2 { color: #895129; }
+
+/* Forms & Buttons */
+.form-group { margin-bottom: 15px; }
+label { display: block; margin-bottom: 5px; font-weight: bold; }
+input[type="text"], input[type="password"], textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; }
+.btn { display: inline-block; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: 500; border: none; cursor: pointer; background: #895129; color: #fff; }
+.btn-secondary { background: #6c6658; }
+.btn-delete { background: #e74c3c; font-size: 0.8em; padding: 5px 10px; }
+
+/* Content Lists */
+.list-item { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #eee; }
+.list-item-content { margin-bottom: 10px; }
+.list-item-actions button { margin-right: 10px; }
