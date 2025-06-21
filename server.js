@@ -30,15 +30,15 @@ function writeDb(data) {
 
 // --- PUBLIC API ROUTES ---
 // These are for your main website to consume.
-app.get('/api/testimonials', (req, res) => res.json(readDb().testimonials));
-app.get('/api/blogs', (req, res) => res.json(readDb().blogs));
-app.get('/api/faqs', (req, res) => res.json(readDb().faqs));
+app.get('https://terra-mater.vercel.app/api/testimonials', (req, res) => res.json(readDb().testimonials));
+app.get('https://terra-mater.vercel.app/api/blogs', (req, res) => res.json(readDb().blogs));
+app.get('https://terra-mater.vercel.app/api/faqs', (req, res) => res.json(readDb().faqs));
 
 
 // --- ADMIN ROUTES ---
 
 // Admin Login
-app.post('/api/admin/login', (req, res) => {
+app.post('https://terra-mater.vercel.app/api/admin/login', (req, res) => {
     const { password } = req.body;
     if (password === ADMIN_PASSWORD) {
         res.status(200).json({ success: true, message: 'Login successful' });
@@ -61,13 +61,13 @@ const authMiddleware = (req, res, next) => {
 // Generic CRUD functions to avoid repetition
 function createCrudEndpoints(type) {
     // GET all items of a type
-    app.get(`/api/admin/${type}`, authMiddleware, (req, res) => {
+    app.get(`https://terra-mater.vercel.app/api/admin/${type}`, authMiddleware, (req, res) => {
         const db = readDb();
         res.json(db[type]);
     });
 
     // **NEW**: GET a single item by ID
-    app.get(`/api/admin/${type}/:id`, authMiddleware, (req, res) => {
+    app.get(`https://terra-mater.vercel.app/api/admin/${type}/:id`, authMiddleware, (req, res) => {
         const db = readDb();
         const id = parseInt(req.params.id, 10);
         const item = db[type].find(i => i.id === id);
@@ -79,7 +79,7 @@ function createCrudEndpoints(type) {
     });
 
     // POST a new item
-    app.post(`/api/admin/${type}`, authMiddleware, (req, res) => {
+    app.post(`https://terra-mater.vercel.app/api/admin/${type}`, authMiddleware, (req, res) => {
         const db = readDb();
         const newItem = { id: Date.now(), ...req.body };
         db[type].unshift(newItem);
@@ -88,7 +88,7 @@ function createCrudEndpoints(type) {
     });
 
     // PUT (update) an item
-    app.put(`/api/admin/${type}/:id`, authMiddleware, (req, res) => {
+    app.put(`https://terra-mater.vercel.app/api/admin/${type}/:id`, authMiddleware, (req, res) => {
         const db = readDb();
         const id = parseInt(req.params.id, 10);
         const index = db[type].findIndex(item => item.id === id);
@@ -102,7 +102,7 @@ function createCrudEndpoints(type) {
     });
 
     // DELETE an item
-    app.delete(`/api/admin/${type}/:id`, authMiddleware, (req, res) => {
+    app.delete(`https://terra-mater.vercel.app/api/admin/${type}/:id`, authMiddleware, (req, res) => {
         const db = readDb();
         const id = parseInt(req.params.id, 10);
         const initialLength = db[type].length;
@@ -125,6 +125,6 @@ createCrudEndpoints('faqs');
 
 // --- START SERVER ---
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on https://terra-mater.vercel.app:${PORT}`);
     readDb(); // Initialize DB on start if it doesn't exist
 });
