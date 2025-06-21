@@ -14,7 +14,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- CONFIGURATION ---
-    const API_URL = 'https://terra-mater.vercel.app/api/admin';
+    const API_URL = '/api/admin';
     let authToken = sessionStorage.getItem('terramater_admin_token');
 
     // --- DOM ELEMENT SELECTORS ---
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loginStatus.textContent = 'Logging in...';
 
         try {
-            const response = await fetch('https://terra-mater.vercel.app/api/admin/login', {
+            const response = await fetch('/api/admin/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password })
