@@ -8,8 +8,7 @@ const PORT = process.env.PORT || 3000;
 
 // --- CONFIGURATION ---
 const ADMIN_PASSWORD = "1234"; 
-// Define the path to db.json at the top
-const dbPath = path.join(process.cwd(), 'db.json');
+const DB_FILE = path.join(__dirname, 'db.json');
 
 // --- MIDDLEWARE ---
 app.use(cors());
@@ -17,16 +16,16 @@ app.use(express.json());
 
 // --- DATABASE HELPER ---
 function readDb() {
-    if (!fs.existsSync(dbPath)) {
+    if (!fs.existsSync(DB_FILE)) {
         const initialData = { testimonials: [], blogs: [], faqs: [] };
-        fs.writeFileSync(dbPath, JSON.stringify(initialData, null, 2));
+        fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2));
     }
-     const data = fs.readFileSync(dbPath, 'utf8');
+    const data = fs.readFileSync(DB_FILE, 'utf-8');
     return JSON.parse(data);
 }
 
 function writeDb(data) {
-    fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
+    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
 }
 
 // --- PUBLIC API ROUTES ---
@@ -126,6 +125,6 @@ createCrudEndpoints('faqs');
 
 // --- START SERVER ---
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on port:${PORT}`);
     readDb(); // Initialize DB on start if it doesn't exist
 });
