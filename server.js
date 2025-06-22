@@ -128,3 +128,6 @@ app.listen(PORT, () => {
     console.log(`Server is running on port:${PORT}`);
     readDb(); // Initialize DB on start if it doesn't exist
 });
+
+// Export the app for Vercel
+module.exports = app;
