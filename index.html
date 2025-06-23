@@ -227,7 +227,7 @@
 
         /* Enhanced Section with parallax effect */
         .hero {
-            min-height: 80vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -240,6 +240,7 @@
             background-color: var(--bg-dark);
             background-attachment: fixed;
             overflow: hidden;
+            padding-top: 80px;
         }
 
         .hero::before {
@@ -270,6 +271,7 @@
             animation: heroFadeIn 1.2s ease forwards 0.5s;
             position: relative;
             z-index: 2;
+            margin-top: 20px;
         }
 
         @keyframes heroFadeIn {
@@ -295,6 +297,27 @@
             margin-right: auto;
             opacity: 0;
             animation: fadeInUp 0.8s ease forwards 1s;
+        }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 100vh;
+                padding-top: 100px;
+            }
+            
+            .hero-content {
+                margin-top: 0;
+                padding: var(--space-4);
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtext {
+                font-size: 1.1rem;
+            }
         }
 
         /* Enhanced About Section with staggered animations */
