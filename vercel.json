@@ -13,6 +13,17 @@
       "src": "main.js",
       "use": "@vercel/static"
     },
+     {
+      "src": "db.json",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "package.json",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "assets/**",
+      "use": "@vercel/static"
     {
       "src": "server.js",
       "use": "@vercel/node"
