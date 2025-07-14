@@ -1,5 +1,46 @@
 document.addEventListener('DOMContentLoaded', function() {
-            const API_URL = '/api'; // Replace with your actual backend URL
+
+
+
+    // Get computed style for root element to access CSS variables
+        const rootStyles = getComputedStyle(document.documentElement);
+        const fontLightColor = rootStyles.getPropertyValue('--font-light').trim();
+        const highlightColor = rootStyles.getPropertyValue('--highlight').trim();
+
+        // --- Navbar Scroll Effect ---
+        const navbar = document.querySelector('.navbar');
+        const navHeight = navbar.offsetHeight;
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > navHeight) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // --- Hamburger Menu Functionality ---
+        const hamburgerButton = document.getElementById('hamburger-button');
+        const navMenu = document.querySelector('.nav-menu');
+
+        if (hamburgerButton && navMenu) {
+            hamburgerButton.addEventListener('click', () => {
+                hamburgerButton.classList.toggle('is-active');
+                navMenu.classList.toggle('active');
+                document.body.classList.toggle('no-scroll'); // Optional: Add a class to body to prevent scrolling when menu is open
+            });
+
+            // Close menu when a navigation link is clicked (for single-page apps)
+            navMenu.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburgerButton.classList.remove('is-active');
+                    navMenu.classList.remove('active');
+                    document.body.classList.remove('no-scroll');
+                });
+            });
+        }
+
+            const API_URL = 'http://localhost:3000/api'; // Replace with your actual backend URL
 
             // --- TESTIMONIALS ---
             function loadTestimonials() {
