@@ -18,6 +18,8 @@
             --font-dark: #000000;
             --font-light: #6c6658;
             --highlight: #895129;
+            --nav-height: 80px; /* Define nav-height for consistent calculations */
+            --nav-shadow-color: rgba(0, 0, 0, 0.15);
             
             /* Spacing System */
             --space-1: 4px;
@@ -37,7 +39,7 @@
             line-height: 1.6;
             color: var(--font-light);
             background-color: var(--bg-light);
-            background-image: url('assets/img/background.jpg');
+            background-image: url('assets/img/background.jpg'); /* Ensure this path is correct */
             background-size: cover;
             background-attachment: fixed;
             overflow-x: hidden;
@@ -56,26 +58,30 @@
         h2 { font-size: 3rem; margin-bottom: var(--space-4); }
         h3 { font-size: 2rem; color: var(--font-light); }
 
-        /* Enhanced Navigation with smooth backdrop */
+        /* --- Navbar --- */
         .navbar {
             background: transparent;
             position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
             z-index: 1000;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             padding: var(--space-3) 0;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
         }
 
         .navbar.scrolled {
             background-color: rgba(244, 241, 236, 0.95);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            transform: translateY(0);
         }
 
         .nav-container {
+            width: 100%;
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 var(--space-4);
@@ -85,13 +91,13 @@
         }
 
         .logo {
-            font-family: 'Circe Contrast', serif;
+            font-family: 'Georgia', 'Times New Roman', serif;
             font-size: 2.3rem;
-            font-weight: 700;
+            font-weight: bold;
             color: var(--font-dark);
             text-decoration: none;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translateZ(0);
+            transform: translateZ(0); /* GPU acceleration trick */
         }
 
         .logo:hover {
@@ -102,16 +108,20 @@
         .nav-menu {
             display: flex;
             list-style: none;
-            gap: var(--space-4);
+            gap: 2rem;
+            align-items: center;
+            /* Added for smooth menu transition from Skatenbeyond example */
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
         }
 
         .nav-link {
             text-decoration: none;
             color: var(--font-light);
-            font-weight: 400;
+            font-weight: 500; /* Slightly bolder for better readability */
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             padding-bottom: var(--space-1);
             position: relative;
+            border-radius: 4px;
             overflow: hidden;
         }
 
@@ -135,6 +145,128 @@
             transform: translateY(-2px);
         }
 
+        /* --- HAMBURGER BUTTON STYLES --- */
+        .hamburger {
+            display: none; /* Hidden by default on large screens */
+            background-color: #b55025;
+            width: 60px;
+            height: 60px;
+            border-radius: 60px;
+            box-shadow: 0px 6px 30px 0px rgba(0,0,0,0);
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            position: relative; /* Needed for positioning the inner box */
+            transition: opacity 0.3s;
+            z-index: 1100; /* Ensure it's above other nav elements */
+        }
+        
+        .hamburger:hover {
+            opacity: 0.8;
+        }
+
+        .hamburger-box {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hamburger-inner {
+            display: block;
+            top: 50%;
+            margin-top: -2px;
+            width: 30px;
+            height: 3px;
+            background-color: #ecf0f1;
+            border-radius: 2px;
+            position: absolute;
+            transition: all 0.3s ease;
+        }
+        .hamburger-inner::before,
+        .hamburger-inner::after {
+            content: '';
+            display: block;
+            width: 30px;
+            height: 3px;
+            background-color: #ecf0f1;
+            border-radius: 2px;
+            position: absolute;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-inner::before {
+            top: -10px;
+        }
+        .hamburger-inner::after {
+            bottom: -10px;
+        }
+
+        /* Hamburger Animation */
+        .hamburger.is-active .hamburger-inner {
+            transform: rotate(225deg);
+        }
+
+        .hamburger.is-active .hamburger-inner::before {
+            top: 0;
+            transform: rotate(90deg);
+        }
+
+        .hamburger.is-active .hamburger-inner::after {
+            bottom: 0;
+            transform: rotate(90deg);
+        }
+
+
+        /* --- RESPONSIVE STYLES (for screens 768px and smaller) --- */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block; /* Show the hamburger icon */
+            }
+            
+            .nav-menu {
+                /* Layout and positioning */
+                position: fixed; /* Use fixed for full viewport overlay */
+                top: var(--nav-height); /* Start below the fixed navbar */
+                left: 0;
+                width: 100%;
+                height: calc(100vh - var(--nav-height)); /* Full height minus navbar height */
+                padding-top: 2rem; /* Spacing from the top after opening */
+                
+                /* Appearance */
+                background-color: rgba(244, 241, 236, 0.98);
+                box-shadow: 0 4px 10px var(--nav-shadow-color);
+                
+                /* Flex properties for centering items */
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start; /* Align items to the start of the flex container */
+                
+                /* Animation Properties for Smooth Transition */
+                transform: translateX(100%); /* Start off-screen to the right */
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s 0.4s;
+            }
+            
+            /* This class is toggled by JavaScript to show the menu */
+            .nav-menu.active {
+                opacity: 1;
+                visibility: visible;
+                transform: translateX(0); /* Slide into view */
+                transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s 0s;
+            }
+
+            /* Adjust individual links for the mobile menu */
+            .nav-menu li {
+                margin: 1rem 0; /* Add vertical spacing between links */
+            }
+            .nav-menu .nav-link {
+                font-size: 1.5rem; /* Make text larger for mobile */
+                color: var(--font-dark);
+            }
+        }
         /* Page Structure & Spacing with fade-in animations */
         .section {
             padding: var(--space-5) var(--space-4);
@@ -227,20 +359,19 @@
 
         /* Enhanced Section with parallax effect */
         .hero {
-            min-height: 100vh;
+            min-height: 80vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             position: relative;
-            background-image: url('assets/img/profile.jpg');
+            background-image: url('assets/img/profile.jpg'); /* Ensure this path is correct */
             background-size: cover;
             background-position: center;
             background-blend-mode: luminosity;
             background-color: var(--bg-dark);
             background-attachment: fixed;
             overflow: hidden;
-            padding-top: 80px;
         }
 
         .hero::before {
@@ -271,7 +402,6 @@
             animation: heroFadeIn 1.2s ease forwards 0.5s;
             position: relative;
             z-index: 2;
-            margin-top: 20px;
         }
 
         @keyframes heroFadeIn {
@@ -299,27 +429,6 @@
             animation: fadeInUp 0.8s ease forwards 1s;
         }
 
-        /* Mobile-specific adjustments */
-        @media (max-width: 768px) {
-            .hero {
-                min-height: 100vh;
-                padding-top: 100px;
-            }
-            
-            .hero-content {
-                margin-top: 0;
-                padding: var(--space-4);
-            }
-            
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero-subtext {
-                font-size: 1.1rem;
-            }
-        }
-
         /* Enhanced About Section with staggered animations */
         .about-grid {
             display: grid;
@@ -331,7 +440,7 @@
         }
         
         .about-grid.reverse {
-             grid-template-columns: 1.5fr 1fr;
+            grid-template-columns: 1.5fr 1fr;
         }
         
         .about-image {
@@ -565,8 +674,8 @@
 
         @media (min-width: 1024px) {
             .testimonial-grid {
-                 padding-left: 3rem;
-                 padding-right: 3rem;
+                padding-left: 3rem;
+                padding-right: 3rem;
             }
             .testimonial-card {
                 flex: 0 0 30%;
@@ -575,7 +684,7 @@
         }
         
         .testimonial-quote {
-            font-family: 'Britanny', serif;
+            font-family: 'Britanny', serif; /* Ensure this font is imported or a fallback is provided */
             font-style: italic;
             font-size: clamp(1.1rem, 2.5vw, 1.3rem);
             line-height: 1.6;
@@ -595,7 +704,7 @@
         }
 
         .testimonial-author {
-            font-family: 'Now Regular', sans-serif;
+            font-family: 'Now Regular', sans-serif; /* Ensure this font is imported or a fallback is provided */
             font-size: 1.1rem;
             color: var(--font-dark);
             font-weight: 600;
@@ -615,7 +724,7 @@
         }
         
         @media (min-width: 1024px) {
-             .testimonial-nav {
+            .testimonial-nav {
                 display: flex;
             }
         }
@@ -736,13 +845,13 @@
         }
 
         .footer-content{
-             background: linear-gradient(135deg, rgba(208, 199, 198, 0.9), rgba(208, 199, 198, 0.7));
-             padding: var(--space-4);
-             border-radius: 12px;
-             backdrop-filter: blur(10px);
-             -webkit-backdrop-filter: blur(10px);
-             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-             transition: all 0.4s ease;
+            background: linear-gradient(135deg, rgba(208, 199, 198, 0.9), rgba(208, 199, 198, 0.7));
+            padding: var(--space-4);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
         }
 
         .footer-content:hover {
@@ -805,12 +914,21 @@
             }
             
             .hero-content{
-                 padding: var(--space-4);
+                padding: var(--space-4);
             }
 
             .nav-menu {
-                flex-direction: column;
-                gap: var(--space-2);
+                /* On small screens, hide the menu by default */
+                display: flex; /* keep as flex for column direction */
+                opacity: 0;
+                visibility: hidden;
+                transform: translateX(100%); /* Start off-screen */
+            }
+
+            .nav-menu.active {
+                opacity: 1;
+                visibility: visible;
+                transform: translateX(0);
             }
 
             .services-grid {
@@ -958,24 +1076,23 @@
         }
 
         .whatsapp-float {
-                position: fixed;
-                width: 60px;
-                height: 60px;
-                bottom: 40px;
-                right: 40px;
-                background-color: #965622;
-                color: #FFF;
-                border-radius: 50px;
-                text-align: center;
-                font-size: 30px;
-                box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
-                z-index: 1000;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: transform 0.3s ease-in-out;
-                }
-
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: #9e581f;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease-in-out;
+        }
 
         .whatsapp-float:hover {
             transform: translateY(-5px);
@@ -988,6 +1105,7 @@
             height: 36px;
             fill: white;
         }
+
         /* Loading Animation */
         @keyframes pulse {
             0%, 100% { opacity: 1; }
@@ -997,6 +1115,7 @@
         .loading {
             animation: pulse 1.5s ease-in-out infinite;
         }
+        
     </style>
 </head>
 <body>
@@ -1005,6 +1124,11 @@
     <nav class="navbar">
         <div class="nav-container">
             <a href="#home" class="logo">Terra Mater</a>
+            <button role="button" title="Menu Button" aria-label="Menu Button" id="hamburger-button" class="hamburger hamburger--spin" type="button" alt="Menu">
+                <span class="hamburger-box">
+                    <span class="hamburger-inner"></span>
+                </span>
+            </button>
             <ul class="nav-menu">
                 <li><a href="#about" class="nav-link">About</a></li>
                 <li><a href="#services" class="nav-link">Services</a></li>
@@ -1013,6 +1137,7 @@
             </ul>
         </div>
     </nav>
+    
 
     <section id="home" class="hero section">
         <div class="hero-content">
@@ -1033,11 +1158,11 @@
                 </div>
             </div>
             <div class="about-grid reverse">
-                 <div class="about-text">
-                    <h3>Our Coaching Philosophy</h3>
-                    <p>At Terra Mater Coaching, we embrace a philosophy rooted in somatic support and embodied empowerment. Our approach combines gentle presence with practical wisdom, helping mothers connect with their innate strength while providing the deep care needed during this transformative time. We honor the "Mother Earth" within every woman—that deep, nurturing wisdom that deserves to be cared for in return.</p>
-                </div>
-                 <div class="about-image" style="background-image: url('assets/img/guidance.png');"></div>
+                    <div class="about-text">
+                        <h3>Our Coaching Philosophy</h3>
+                        <p>At Terra Mater Coaching, we embrace a philosophy rooted in somatic support and embodied empowerment. Our approach combines gentle presence with practical wisdom, helping mothers connect with their innate strength while providing the deep care needed during this transformative time. We honor the "Mother Earth" within every woman—that deep, nurturing wisdom that deserves to be cared for in return.</p>
+                    </div>
+                    <div class="about-image" style="background-image: url('assets/img/guidance.png');"></div>
             </div>
         </section>
 
@@ -1052,7 +1177,7 @@
                     </div>
                 </div>
                 <div class="service-card" style="background-image: url('assets/img/anchor.jpg');">
-                     <div class="content">
+                    <div class="content">
                         <h3>Motherhood Anchor</h3>
                         <p>Comprehensive support during intense seasons. Includes an initial 1:1 session plus 2 months of ongoing guidance via The Sacred Line messaging support to keep you anchored and held.</p>
                         <a href="https://charlotte-ziegler.systeme.io/54982e45-c33b4ec9" class="btn btn-secondary" style="margin-top: var(--space-3);">Inquire About Anchor</a>
@@ -1071,30 +1196,32 @@
         <section id="testimonial" class="section testimonial-block">
             <h2>Testimonials</h2>
             <div id="testimonial-container" class="testimonial-grid">
-
+                </div>
+             <div class="testimonial-nav">
+                <button id="scroll-left">&lt;</button>
+                <button id="scroll-right">&gt;</button>
             </div>
         </section>
 
         <section id="blog" class="section">
             <h2>Blogs</h2>
             <div id="blog-container" class="blog-grid">
-
-            </div>
+                </div>
         </section>
 
         <section id="faq" class="section">
             <h2>Frequently Asked Questions</h2>
             <div id="faq-container">
-            </div>
+                </div>
         </section>
 
         <section id="booking" class="section section-spaced">
-             <div class="booking-section">
+            <div class="booking-section">
                 <h2>Begin Your Journey</h2>
                 <p>Ready to embrace your motherhood journey with presence and deep self-nourishment? Book your complimentary first session today.</p>
                 <a href="https://charlotte-ziegler.systeme.io/p1-inscription-1d797853" target="_blank" class="btn btn-primary">Schedule Via Calendly</a>
                 <p style="margin-top:var(--space-4);">For direct bookings or alternative payment methods, please reach out via the contact methods below.</p>
-             </div>
+            </div>
         </section>
         
         <section id="contact" class="section">
@@ -1117,8 +1244,10 @@
                             <textarea id="message" name="message" rows="5" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Send Message</button>
-                    </div>
-                 <div class="direct-contact-container">
+                    </form>
+                    <p id="form-status"></p>
+                </div>
+                <div class="direct-contact-container">
                     <h3>Connect Directly</h3>
                     <div class="direct-contact-links">
                         <a href="https://wa.me/256781722605" target="_blank" class="btn btn-secondary">WhatsApp</a>
@@ -1127,14 +1256,11 @@
                         <a href="https://facebook.com/YOUR_USERNAME" target="_blank" class="btn btn-secondary">Facebook</a>
                     </div>
                 </div>
-                    </form>
-                    <p id="form-status"></p>
-                
             </div>
         </section>
     </main> 
 
-     <footer class="footer">
+    <footer class="footer">
         <div class="footer-content">
             <p>Connect with me & discuss your journey.</p>
             <div class="footer-links">
@@ -1149,64 +1275,188 @@
         </div>
     </footer>
 
-    <script src="main.js">
-        document.addEventListener('DOMContentLoaded', function() {
-            // --- FAQ Accordion Functionality ---
-            const faqContainer = document.getElementById('faq-container');
-            if (faqContainer) {
-                const faqItems = faqContainer.querySelectorAll('.faq-item');
+    <a href="https://wa.me/256781722605" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.8 0-67.6-9.5-97.2-26.7l-7-4.1-72.5 19.1 19.4-70.5-4.5-7.3C34.4 325.3 24 290.5 24 255.9c0-110.2 89.8-200 200-200 55.1 0 105.9 21.5 143.4 59.4 37.6 37.9 58.6 88.8 58.6 143.4-.1 110.2-89.9 200-200.1 200zm107.7-164.5c-6.2-3.1-36.7-18.2-42.4-20.3-5.7-2.1-9.8-3.1-13.9 3.1-4.1 6.2-16.1 20.3-19.7 24.4-3.6 4.1-7.2 4.6-13.4 1.5-6.2-3.1-26.2-9.6-49.9-30.7-18.5-16.4-31-36.7-34.6-42.9-3.6-6.2-1.1-9.2 1.5-12.2 2.2-2.6 5.1-6.8 7.6-9.2 2.6-2.4 3.4-4.1 5.1-6.8 1.7-2.7 1-5.1-.5-8.2s-13.9-33.5-19-45.9c-5.2-12.4-10.4-10.8-14.5-10.8-3.9 0-8.5-.5-13.1-.5-4.6 0-12.2 1.5-18.4 7.6-6.2 6.2-23.5 23-23.5 55.9 0 32.9 24.1 64.8 27.6 69.4 3.6 4.6 47.1 72.5 113.5 100.4 16.5 7.2 29.4 11.5 39.6 14.8 10.2 3.3 19.4 2.8 26.7 1.8 7.9-1.1 24.4-10.1 27.9-19.8 3.5-9.7 3.5-18.1 2.4-19.8s-3.5-3.1-7.2-6.2z"/>
+        </svg>
+    </a>
 
-                faqItems.forEach(item => {
-                    item.addEventListener('click', () => {
-                        const isActive = item.classList.contains('active');
-                        
-                        // Close all other items for an accordion effect
-                        faqItems.forEach(otherItem => {
-                            otherItem.classList.remove('active');
-                        });
-                        
-                        // If the clicked item wasn't already active, open it
-                        if (!isActive) {
-                            item.classList.add('active');
-                        }
-                    });
-                });
-            }
+   <script src="main.js">
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get computed style for root element to access CSS variables
+        const rootStyles = getComputedStyle(document.documentElement);
+        const fontLightColor = rootStyles.getPropertyValue('--font-light').trim();
+        const highlightColor = rootStyles.getPropertyValue('--highlight').trim();
 
-            // --- Testimonial Scrolling Functionality ---
-            const testimonialContainer = document.getElementById('testimonial-container');
-            const scrollLeftBtn = document.getElementById('scroll-left');
-            const scrollRightBtn = document.getElementById('scroll-right');
+        // --- Navbar Scroll Effect ---
+        const navbar = document.querySelector('.navbar');
+        const navHeight = navbar.offsetHeight;
 
-            if (testimonialContainer && scrollLeftBtn && scrollRightBtn) {
-                const scrollStep = () => {
-                    // Calculate the width of the first card + its margin
-                    const card = testimonialContainer.querySelector('.testimonial-card');
-                    if (!card) return 250; // Fallback value
-                    const cardStyle = window.getComputedStyle(card);
-                    const cardWidth = card.offsetWidth;
-                    const cardMarginRight = parseInt(cardStyle.marginRight, 10);
-                    return cardWidth + cardMarginRight;
-                };
-
-                scrollRightBtn.addEventListener('click', () => {
-                    testimonialContainer.scrollBy({ left: scrollStep(), behavior: 'smooth' });
-                });
-
-                scrollLeftBtn.addEventListener('click', () => {
-                    testimonialContainer.scrollBy({ left: -scrollStep(), behavior: 'smooth' });
-                });
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > navHeight) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
             }
         });
-    </script>
 
-     <a href="https://wa.me/256781722605" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                 <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-            <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.8 0-67.6-9.5-97.2-26.7l-7-4.1-72.5 19.1 19.4-70.5-4.5-7.3C34.4 325.3 24 290.5 24 255.9c0-110.2 89.8-200 200-200 55.1 0 105.9 21.5 143.4 59.4 37.6 37.9 58.6 88.8 58.6 143.4-.1 110.2-89.9 200-200.1 200zm107.7-164.5c-6.2-3.1-36.7-18.2-42.4-20.3-5.7-2.1-9.8-3.1-13.9 3.1-4.1 6.2-16.1 20.3-19.7 24.4-3.6 4.1-7.2 4.6-13.4 1.5-6.2-3.1-26.2-9.6-49.9-30.7-18.5-16.4-31-36.7-34.6-42.9-3.6-6.2-1.1-9.2 1.5-12.2 2.2-2.6 5.1-6.8 7.6-9.2 2.6-2.4 3.4-4.1 5.1-6.8 1.7-2.7 1-5.1-.5-8.2s-13.9-33.5-19-45.9c-5.2-12.4-10.4-10.8-14.5-10.8-3.9 0-8.5-.5-13.1-.5-4.6 0-12.2 1.5-18.4 7.6-6.2 6.2-23.5 23-23.5 55.9 0 32.9 24.1 64.8 27.6 69.4 3.6 4.6 47.1 72.5 113.5 100.4 16.5 7.2 29.4 11.5 39.6 14.8 10.2 3.3 19.4 2.8 26.7 1.8 7.9-1.1 24.4-10.1 27.9-19.8 3.5-9.7 3.5-18.1 2.4-19.8s-3.5-3.1-7.2-6.2z"/>
-            </svg>
-    </a>
-    </body>
+        // --- Hamburger Menu Functionality ---
+        const hamburgerButton = document.getElementById('hamburger-button');
+        const navMenu = document.querySelector('.nav-menu');
+
+        if (hamburgerButton && navMenu) {
+            hamburgerButton.addEventListener('click', () => {
+                hamburgerButton.classList.toggle('is-active');
+                navMenu.classList.toggle('active');
+                document.body.classList.toggle('no-scroll'); // Optional: Add a class to body to prevent scrolling when menu is open
+            });
+
+            // Close menu when a navigation link is clicked (for single-page apps)
+            navMenu.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburgerButton.classList.remove('is-active');
+                    navMenu.classList.remove('active');
+                    document.body.classList.remove('no-scroll');
+                });
+            });
+        }
+
+        // --- Scroll Progress Indicator ---
+        const scrollProgress = document.querySelector('.scroll-progress');
+        window.addEventListener('scroll', () => {
+            const totalHeight = document.body.scrollHeight - window.innerHeight;
+            const scrollPosition = window.scrollY;
+            const progress = (scrollPosition / totalHeight) * 100;
+            scrollProgress.style.width = progress + '%';
+        });
+
+
+        // --- FAQ Accordion Functionality ---
+        const faqContainer = document.getElementById('faq-container');
+        if (faqContainer) {
+            // Example FAQ data (you can fetch this dynamically)
+            const faqData = [
+                { question: "What is Terra Mater Coaching?", answer: "Terra Mater Coaching focuses on providing gentle, embodied support for mothers navigating the profound transformation of motherhood. We combine presence with practical wisdom to help you connect with your innate strength." },
+                { question: "Who is Charlotte and what is her background?", answer: "Charlotte is a certified postpartum coach with personal experience in the motherhood journey. She's passionate about helping mothers feel held, understood, and empowered." },
+                { question: "What is 'Motherhood Guidance'?", answer: "Motherhood Guidance is a transformative 1:1 session designed to offer clarity and grounded support, blending self-nourishment with the realities of motherhood." },
+                { question: "What does 'Motherhood Anchor' include?", answer: "'Motherhood Anchor' offers comprehensive support over two months, including an initial 1:1 session and continuous guidance via The Sacred Line messaging support." },
+                { question: "What is 'The Sacred Line'?", answer: "The Sacred Line is a dedicated messaging support channel for 'Motherhood Anchor' clients, providing continuous connection and support during intense seasons of motherhood." }
+            ];
+
+            faqData.forEach((faq, index) => {
+                const faqItem = document.createElement('div');
+                faqItem.classList.add('faq-item');
+                faqItem.innerHTML = `
+                    <h4>${faq.question}</h4>
+                    <p>${faq.answer}</p>
+                `;
+                faqContainer.appendChild(faqItem);
+            });
+
+            const faqItems = faqContainer.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const isActive = item.classList.contains('active');
+                    
+                    // Close all other items for an accordion effect
+                    faqItems.forEach(otherItem => {
+                        otherItem.classList.remove('active');
+                    });
+                    
+                    // If the clicked item wasn't already active, open it
+                    if (!isActive) {
+                        item.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        // --- Testimonial Scrolling Functionality ---
+        const testimonialContainer = document.getElementById('testimonial-container');
+        const scrollLeftBtn = document.getElementById('scroll-left');
+        const scrollRightBtn = document.getElementById('scroll-right');
+
+        if (testimonialContainer && scrollLeftBtn && scrollRightBtn) {
+            // Example Testimonial Data
+            const testimonials = [
+                { quote: "Charlotte's guidance helped me find my footing again after childbirth. Her gentle approach was exactly what I needed.", author: "Anya S." },
+      
+            ];
+
+            testimonials.forEach(testimonial => {
+                const card = document.createElement('div');
+                card.classList.add('testimonial-card');
+                card.innerHTML = `
+                    <p class="testimonial-quote">${testimonial.quote}</p>
+                    <p class="testimonial-author">- ${testimonial.author}</p>
+                `;
+                testimonialContainer.appendChild(card);
+            });
+
+            const scrollStep = () => {
+                const card = testimonialContainer.querySelector('.testimonial-card');
+                if (!card) return 250; 
+                const cardStyle = window.getComputedStyle(card);
+                const cardWidth = card.offsetWidth;
+                const cardMarginRight = parseInt(cardStyle.marginRight, 10);
+                return cardWidth + cardMarginRight;
+            };
+
+            scrollRightBtn.addEventListener('click', () => {
+                testimonialContainer.scrollBy({ left: scrollStep(), behavior: 'smooth' });
+            });
+
+            scrollLeftBtn.addEventListener('click', () => {
+                testimonialContainer.scrollBy({ left: -scrollStep(), behavior: 'smooth' });
+            });
+        }
+
+        // --- Blog Posts Functionality ---
+        const blogContainer = document.getElementById('blog-container');
+        if (blogContainer) {
+            // Example Blog Data
+            const blogPosts = [
+                { title: "The Power of Gentle Presence in Motherhood", excerpt: "Discover how cultivating gentle presence can transform your daily experience as a mother, fostering calm and connection amidst the chaos.", link: "#" },
+                { title: "Somatic Practices for Postpartum Healing", excerpt: "Explore simple yet profound somatic exercises that support physical and emotional recovery after childbirth, helping you reconnect with your body.", link: "#" },
+                { title: "Nourishing the Mother Earth Within", excerpt: "Learn how to tap into your inherent nurturing wisdom and prioritize self-care, ensuring your cup is full so you can pour into your family.", link: "#" },
+                { title: "Finding Your Anchor in Challenging Times", excerpt: "Strategies for staying grounded and resilient when motherhood feels overwhelming, providing practical tips for navigating tough seasons.", link: "#" }
+            ];
+
+            blogPosts.forEach(post => {
+                const card = document.createElement('div');
+                card.classList.add('blog-post-card');
+                card.innerHTML = `
+                    <h3>${post.title}</h3>
+                    <p class="blog-excerpt">${post.excerpt}</p>
+                    <a href="${post.link}" class="read-more-link">Read More &rarr;</a>
+                `;
+                blogContainer.appendChild(card);
+            });
+        }
+
+        // --- Contact Form Submission (Example - replace with actual backend) ---
+        const contactForm = document.getElementById('contact-form');
+        const formStatus = document.getElementById('form-status');
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                formStatus.textContent = 'Sending message...';
+                formStatus.style.color = fontLightColor; // Use the JavaScript variable
+                formStatus.classList.add('loading');
+
+                // Simulate form submission (replace with actual AJAX or fetch to your backend)
+                setTimeout(() => {
+                    formStatus.textContent = 'Message sent successfully!';
+                    formStatus.style.color = highlightColor; // Use the JavaScript variable
+                    formStatus.classList.remove('loading');
+                    contactForm.reset(); // Clear the form
+                }, 2000); 
+            });
+        }
+    });
+</script>
+
+</body>
 </html>
-
-        
