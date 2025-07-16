@@ -10,7 +10,7 @@
       "use": "@vercel/static"
     },
     {
-      "src": "asseta/**",
+      "src": "assets/**",
       "use": "@vercel/static"
     },
     {
