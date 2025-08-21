@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terra Mater - Admin Panel</title>
+    <!--<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>-->
+    
+    <link rel="stylesheet" href="public/assets/css/admin.css">
+    <style>
+        /* Include consistent header styling */
+        :root {
+            --bg-light: #f4f1ec;
+            --bg-dark: #d0c7c6;
+            --font-dark: #000000;
+            --font-light: #6c6658;
+            --highlight: #895129;
+            --nav-height: 80px;
+            --space-3: 16px;
+            --space-4: 32px;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            background: transparent;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: var(--space-3) 0;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar.scrolled {
+            background-color: rgba(244, 241, 236, 0.95);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 2.3rem;
+            font-weight: bold;
+            color: var(--font-dark);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--font-light);
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding-bottom: var(--space-1);
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--font-dark);
+            transform: translateY(-2px);
+        }
+
+        /* --- HAMBURGER BUTTON STYLES --- */
+        .hamburger {
+            display: none; /* Hidden by default on large screens */
+            background-color: #b55025;
+            width: 60px;
+            height: 60px;
+            border-radius: 60px;
+            box-shadow: 0px 6px 30px 0px rgba(0,0,0,0);
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            position: relative; /* Needed for positioning the inner box */
+            transition: opacity 0.3s;
+            z-index: 1100; /* Ensure it's above other nav elements */
+        }
+        
+        .hamburger:hover {
+            opacity: 0.8;
+        }
+
+        .hamburger-box {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hamburger-inner {
+            display: block;
+            top: 50%;
+            margin-top: -2px;
+            width: 30px;
+            height: 3px;
+            background-color: #ecf0f1;
+            border-radius: 2px;
+            position: absolute;
+            transition: all 0.3s ease;
+        }
+        .hamburger-inner::before,
+        .hamburger-inner::after {
+            content: '';
+            display: block;
+            width: 30px;
+            height: 3px;
+            background-color: #ecf0f1;
+            border-radius: 2px;
+            position: absolute;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-inner::before {
+            top: -10px;
+        }
+        .hamburger-inner::after {
+            bottom: -10px;
+        }
+
+        /* Hamburger Animation */
+        .hamburger.is-active .hamburger-inner {
+            transform: rotate(225deg);
+        }
+
+        .hamburger.is-active .hamburger-inner::before {
+            top: 0;
+            transform: rotate(90deg);
+        }
+
+        .hamburger.is-active .hamburger-inner::after {
+            bottom: 0;
+            transform: rotate(90deg);
+        }
+
+        /* --- RESPONSIVE STYLES (for screens 768px and smaller) --- */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block; /* Show the hamburger icon */
+                z-index: 1100; /* Ensure it's above the menu */
+            }
+            
+            .nav-menu {
+                /* Layout and positioning */
+                position: fixed; /* Use fixed for full viewport overlay */
+                top: var(--nav-height); /* Start below the fixed navbar */
+                left: 0;
+                right: 0;
+                width: 100vw;
+                height: calc(100vh - var(--nav-height)); /* Full height minus navbar height */
+                padding-top: 2rem; /* Spacing from the top after opening */
+                
+                /* Appearance */
+                background-color: rgba(244, 241, 236, 0.98);
+                backdrop-filter: blur(15px);
+                -webkit-backdrop-filter: blur(15px);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                
+                /* Flex properties for centering items */
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start; /* Align items to the start of the flex container */
+                
+                /* Animation Properties for Smooth Transition */
+                transform: translateX(100%); /* Start off-screen to the right */
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s 0.4s;
+                z-index: 1000;
+            }
+            
+            /* This class is toggled by JavaScript to show the menu */
+            .nav-menu.active {
+                opacity: 1;
+                visibility: visible;
+                transform: translateX(0); /* Slide into view */
+                transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s 0s;
+            }
+
+            /* Adjust individual links for the mobile menu */
+            .nav-menu li {
+                margin: 1.5rem 0; /* Add vertical spacing between links */
+                transform: translateY(20px);
+                opacity: 0;
+                animation: none;
+            }
+
+            .nav-menu.active li {
+                animation: slideInFromRight 0.5s ease forwards;
+            }
+
+            .nav-menu.active li:nth-child(1) { animation-delay: 0.1s; }
+            .nav-menu.active li:nth-child(2) { animation-delay: 0.2s; }
+            .nav-menu.active li:nth-child(3) { animation-delay: 0.3s; }
+            .nav-menu.active li:nth-child(4) { animation-delay: 0.4s; }
+            .nav-menu.active li:nth-child(5) { animation-delay: 0.5s; }
+
+            @keyframes slideInFromRight {
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            
+            .nav-menu .nav-link {
+                font-size: 1.5rem; /* Make text larger for mobile */
+                color: var(--font-dark);
+                padding: 1rem 2rem;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+                display: block;
+                text-align: center;
+                min-width: 200px;
+            }
+
+            .nav-menu .nav-link:hover {
+                background-color: rgba(137, 81, 41, 0.1);
+                transform: translateY(-2px) scale(1.05);
+            }
+        }
+
+        /* Prevent scrolling when mobile menu is open */
+        .no-scroll {
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding-top: var(--nav-height);
+            font-family: '29LT Zarid Text Light', 'Times New Roman', serif;
+            background-color: var(--bg-light);
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="scroll-progress"></div>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Terra Mater</a>
+            <button role="button" title="Menu Button" aria-label="Menu Button" id="hamburger-button" class="hamburger hamburger--spin" type="button" alt="Menu">
+                <span class="hamburger-box">
+                    <span class="hamburger-inner"></span>
+                </span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+                <li><a href="index.html#services" class="nav-link">Services</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                <li><a href="#" class="nav-link">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="login-container">
+        <h2>Admin Login</h2>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn">Login</button>
+            <p id="login-status" class="error"></p>
+        </form>
+    </div>
+
+    <div id="admin-dashboard" class="hidden">
+        <header class="dashboard-header">
+            <h1>Admin Dashboard</h1>
+            <button id="logout-btn" class="btn btn-secondary">Logout</button>
+        </header>
+
+        <section id="testimonials-manager">
+            <h2>Manage Testimonials</h2>
+            <form id="testimonials-form">
+                <input type="hidden" name="id" id="testimonial-id">
+                <div class="form-group">
+                    <label for="testimonial-quote">Quote</label>
+                    <textarea name="quote" id="testimonial-quote" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="testimonial-author">Author (e.g., Sarah M.)</label>
+                    <input type="text" name="author" id="testimonial-author" required>
+                </div>
+                <button type="submit" class="btn">Save Testimonial</button>
+            </form>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Quote</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="testimonials-list"></tbody>
+            </table>
+        </section>
+
+        <section id="blog-manager">
+            <h2>Manage Blog Posts</h2>
+            <form id="blogs-form">
+                <input type="hidden" name="id" id="blog-id">
+                <div class="form-group">
+                    <label for="blog-title">Post Title</label>
+                    <input type="text" name="title" id="blog-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="blog-excerpt">Post Excerpt</label>
+                    <textarea name="excerpt" id="blog-excerpt" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="blog-content">Post Content (HTML allowed)</label>
+                    <textarea name="content" id="blog-content" rows="10" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="blog-link">Post Link (optional)</label>
+                    <input type="url" name="link" id="blog-link" placeholder="https://...">
+                </div>
+                <button type="submit" class="btn">Save Post</button>
+            </form>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="blogs-list"></tbody>
+            </table>
+        </section>
+
+        <section id="faq-manager">
+            <h2>Manage FAQs</h2>
+            <form id="faqs-form">
+                <input type="hidden" name="id" id="faq-id">
+                <div class="form-group">
+                    <label for="faq-question">Question</label>
+                    <input type="text" name="question" id="faq-question" required>
+                </div>
+                <div class="form-group">
+                    <label for="faq-answer">Answer</label>
+                    <textarea name="answer" id="faq-answer" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn">Save FAQ</button>
+            </form>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Question</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="faqs-list"></tbody>
+            </table>
+        </section>
+<!--
+        <section id="project-manager">
+            <h2>Manage Projects</h2>
+            <form id="projects-form">
+                <input type="hidden" name="id" id="project-id">
+                <div class="form-group">
+                    <label for="project-name">Project Name</label>
+                    <input type="text" name="name" id="project-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="project-description">Description</label>
+                    <textarea name="description" id="project-description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="project-location">Location</label>
+                    <input type="text" name="location" id="project-location">
+                </div>
+                <button type="submit" class="btn">Save Project</button>
+            </form>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="projects-list"></tbody>
+            </table>
+        </section> -->
+
+        <!--<section id="data-entry-manager">
+            <h2>Manage Data Entries</h2>
+            <form id="data_entries-form">
+                <input type="hidden" name="id" id="data-entry-id">
+                <div class="form-group">
+                    <label for="data-entry-project">Project</label>
+                    <select name="project_id" id="data-entry-project" required>
+                        <option value="">Select Project...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="data-entry-data">Data (JSON)</label>
+                    <textarea name="data" id="data-entry-data" rows="6" placeholder='{"key": "value"}' required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="data-entry-metadata">Metadata (JSON, optional)</label>
+                    <textarea name="metadata" id="data-entry-metadata" rows="3" placeholder='{"source": "field_work", "date": "2024-01-01"}'></textarea>
+                </div>
+                <button type="submit" class="btn">Save Data Entry</button>
+            </form>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Project</th>
+                        <th>Data Preview</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="data_entries-list"></tbody>
+            </table>
+        </section>-->
+    </div>
+    
+    <script type="module" src="src/admin.ts"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Hamburger Menu Functionality ---
+        const hamburgerButton = document.getElementById('hamburger-button');
+        const navMenu = document.querySelector('.nav-menu');
+
+        if (hamburgerButton && navMenu) {
+            hamburgerButton.addEventListener('click', () => {
+                hamburgerButton.classList.toggle('is-active');
+                navMenu.classList.toggle('active');
+                document.body.classList.toggle('no-scroll'); // Optional: Add a class to body to prevent scrolling when menu is open
+            });
+
+            // Close menu when a navigation link is clicked (for single-page apps)
+            navMenu.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburgerButton.classList.remove('is-active');
+                    navMenu.classList.remove('active');
+                    document.body.classList.remove('no-scroll');
+                });
+            });
+        }
+  });
+</script>
+</body>
+</html>

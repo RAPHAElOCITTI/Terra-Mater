@@ -1,0 +1,239 @@
+/* Terra Mater Admin Panel Styles */
+:root {
+    --bg-light: #f4f1ec;
+    --bg-dark: #d0c7c6;
+    --font-dark: #000000;
+    --font-light: #6c6658;
+    --highlight: #895129;
+    --nav-height: 80px;
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 16px;
+    --space-4: 32px;
+    --space-5: 64px;
+}
+
+/* Basic Styles */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+    font-family: '29LT Zarid Text Light', 'Times New Roman', serif;
+    background-color: var(--bg-light);
+    background-image: url('../background.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    color: var(--font-light);
+    line-height: 1.6;
+}
+
+.hidden { display: none; }
+.error { color: #D8000C; font-weight: bold; }
+.success { color: #4F8A10; font-weight: bold; }
+
+/* Layout */
+#login-container {
+    max-width: 500px;
+    margin: 10vh auto;
+    padding: var(--space-5);
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+}
+
+#admin-dashboard {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: var(--space-4);
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--bg-dark);
+    padding-bottom: var(--space-4);
+    margin-bottom: var(--space-5);
+}
+
+section {
+    margin-bottom: var(--space-5);
+    padding: var(--space-4);
+    background: rgba(244, 241, 236, 0.3);
+    border-radius: 12px;
+    border: 1px solid rgba(208, 199, 198, 0.5);
+}
+
+h1, h2 {
+    color: var(--highlight);
+    font-family: 'Circe Contrast', 'Garamond', serif;
+    font-weight: 600;
+    margin-bottom: var(--space-3);
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+
+/* Forms & Buttons */
+.form-group {
+    margin-bottom: var(--space-3);
+}
+
+label {
+    display: block;
+    margin-bottom: var(--space-2);
+    font-weight: 600;
+    color: var(--font-dark);
+    font-size: 1.1rem;
+}
+
+input[type="text"], 
+input[type="email"], 
+input[type="password"], 
+input[type="url"],
+textarea {
+    width: 100%;
+    padding: 12px var(--space-3);
+    border: 2px solid var(--bg-dark);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    background-color: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--highlight);
+    box-shadow: 0 0 0 3px rgba(137, 81, 41, 0.1);
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    background: var(--highlight);
+    color: white;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    margin-right: var(--space-2);
+}
+
+.btn:hover {
+    background: var(--font-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(137, 81, 41, 0.3);
+}
+
+.btn-secondary {
+    background: var(--font-light);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-dark);
+}
+
+.btn-edit {
+    background: #3498db;
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.9rem;
+}
+
+.btn-edit:hover {
+    background: #2980b9;
+}
+
+.btn-delete {
+    background: #e74c3c;
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.9rem;
+}
+
+.btn-delete:hover {
+    background: #c0392b;
+}
+
+/* Admin Tables */
+.admin-table {
+    width: 100%;
+    margin-top: var(--space-4);
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.admin-table thead th {
+    background: var(--highlight);
+    color: white;
+    padding: var(--space-3);
+    text-align: left;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.admin-table tbody td {
+    padding: var(--space-3);
+    border-bottom: 1px solid var(--bg-dark);
+    vertical-align: top;
+}
+
+.admin-table tbody tr:hover {
+    background-color: rgba(137, 81, 41, 0.05);
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Scroll Progress */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--highlight), var(--font-light));
+    z-index: 9999;
+    transition: width 0.1s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #admin-dashboard {
+        margin: 10px;
+        padding: var(--space-3);
+    }
+    
+    .dashboard-header {
+        flex-direction: column;
+        gap: var(--space-3);
+        text-align: center;
+    }
+    
+    .admin-table {
+        font-size: 0.9rem;
+    }
+    
+    .admin-table thead th,
+    .admin-table tbody td {
+        padding: var(--space-2);
+    }
+    
+    .btn {
+        display: block;
+        margin-bottom: var(--space-2);
+        width: 100%;
+        text-align: center;
+    }
+}
