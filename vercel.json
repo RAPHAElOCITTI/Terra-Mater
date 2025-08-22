@@ -1,0 +1,9 @@
+{
+  "builds": [
+    {
+      "src": "src/**/*.tsx",
+      "use": "@vercel/node"
+    }
+  ],
+  "framework": "vite"
+}

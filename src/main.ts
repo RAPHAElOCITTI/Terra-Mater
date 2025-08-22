@@ -1,6 +1,6 @@
 // src/main.ts
 import { supabase } from './db';
-import { Testimonial, Blog, Faq } from './types';
+import type { Testimonial, Blog, Faq } from './types';
 import { Header } from './header';
 
 document.addEventListener('DOMContentLoaded', async () => {

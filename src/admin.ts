@@ -1,8 +1,8 @@
 // src/admin.ts
 import { supabase } from './supabaseClient';
-import type { Testimonial, Blog, Faq, ContentType } from './types';
-import { authService } from './auth';
-import type  { User, AuthError } from '@supabase/supabase-js';
+import type {  ContentType } from './types';
+//import { authService } from './auth';
+//[import type  { User, AuthError } from '@supabase/supabase-js';
 
 // Global DOM elements (will be set when DOM is ready)
 let loginContainer: HTMLElement | null;
@@ -105,6 +105,7 @@ const renderList = async (type: ContentType): Promise<void> => {
     const listElement = document.getElementById(`${type}-list`) as HTMLTableSectionElement | null;
     if (!listElement) return;
 
+    // Start with the base query
     let query = supabase.from(type);
     
     // Select appropriate fields based on content type

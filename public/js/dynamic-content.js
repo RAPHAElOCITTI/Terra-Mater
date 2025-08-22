@@ -68,7 +68,7 @@ async function loadBlogs() {
                 <h3>${escapeHtml(blog.title)}</h3>
                 <p class="blog-excerpt">${escapeHtml(blog.excerpt || 'No excerpt available.')}</p>
                 ${blog.link ? 
-                    `<a href="https://www.instagram.com/charlotte.lamaro/" class="read-more-link" target="_blank" rel="noopener noreferrer">Read More →</a>` : 
+                    `<a href="${blog.link}" class="read-more-link" target="_blank" rel="noopener noreferrer">Read More →</a>` : 
                     `<span class="read-more-link disabled">Coming Soon →</span>`
                 }
             </div>
