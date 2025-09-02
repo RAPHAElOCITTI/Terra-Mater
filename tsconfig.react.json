@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "types": ["vite/client", "react", "react-dom"],
+    "lib": ["dom", "dom.iterable", "es2020"]
+  },
+  "include": ["src/**/*.tsx", "src/**/*.ts"],
+  "exclude": ["src/**/*.vue"]
+}

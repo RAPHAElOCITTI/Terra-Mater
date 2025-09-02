@@ -101,27 +101,24 @@ const handleLogout = async (): Promise<void> => {
  * Fetches and renders the list of items for a given content type.
  * @param type The content type ('testimonials', 'blogs', 'faqs', 'projects', 'data_entries').
  */
+const selectMap = {
+  testimonials: 'id, quote, author, created_at',
+  blogs: 'id, title, created_at',
+  faqs: 'id, question, created_at',
+  projects: 'id, name, location, created_at',
+  data_entries: 'id, project_id, data, created_at, projects(name)'
+} as const;
+
 const renderList = async (type: ContentType): Promise<void> => {
-    const listElement = document.getElementById(`${type}-list`) as HTMLTableSectionElement | null;
-    if (!listElement) return;
+  const listElement = document.getElementById(`${type}-list`) as HTMLTableSectionElement | null;
+  if (!listElement) return;
 
-    // Start with the base query
-    let query = supabase.from(type);
-    
-    // Select appropriate fields based on content type
-    if (type === 'testimonials') {
-        query = query.select('id, quote, author');
-    } else if (type === 'blogs') {
-        query = query.select('id, title');
-    } else if (type === 'faqs') {
-        query = query.select('id, question');
-    } else if (type === 'projects') {
-        query = query.select('id, name, location');
-    } else if (type === 'data_entries') {
-        query = query.select('id, project_id, data, created_at, projects(name)');
-    }
+  const select = selectMap[type];
 
-    const { data, error } = await query.order('created_at', { ascending: false });
+  const { data, error } = await supabase
+    .from(type)
+    .select(select)               // returns FilterBuilder
+    .order('created_at', { ascending: false });
 
     if (error) {
         console.error(`Error loading ${type}:`, error);
