@@ -1275,7 +1275,7 @@
             <div class="contact-wrapper">
                 <div class="contact-form-container">
                     <h3>Send a Message</h3>
-                    <form id="contact-form" action="mailto:charlotte.ziegler@hotmail.com" method="POST">
+                    <form id="contact-form">
                         <div class="form-group">
                             <label for="name">Your Name</label>
                             <input type="text" id="name" name="name" required>
@@ -1327,6 +1327,39 @@
     </a>
 <script type="module" src="public/js/dynamic-content.js"></script>
   <script>
+    const form = document.getElementById('contact-form');
+  const status = document.getElementById('form-status');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    status.textContent = 'Sending...';
+
+    const formData = {
+      name: form.name.value,
+      email: form.email.value,
+      message: form.message.value,
+    };
+
+    try {
+      const response = await fetch('api/send-email.ts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        status.textContent = '✅ Your message has been sent!';
+        form.reset();
+      } else {
+        status.textContent = `❌ Failed to send: ${result.error}`;
+      }
+    } catch (err) {
+      status.textContent = '❌ Network error, please try again.';
+    }
+  });
     document.addEventListener('DOMContentLoaded', function() {
         // --- Hamburger Menu Functionality ---
         const hamburgerButton = document.getElementById('hamburger-button');

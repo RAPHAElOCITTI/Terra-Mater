@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.55.0",
+    "@vercel/node": "^5.3.21",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "resend": "^6.0.3",
     "vue": "^3.5.18"
   },
   "devDependencies": {
