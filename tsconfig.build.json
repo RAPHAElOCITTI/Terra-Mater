@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "noEmit": false,
+    "emitDeclarationOnly": false, // ✅ actually emit JS, not just .d.ts
+    
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"], // include your TS files
+  "exclude": ["src/**/*.vue"] // skip Vue if you don’t want to compile it now
+}
