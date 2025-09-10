@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 // src/admin.ts
-import { supabase } from './supabaseClient';
+import { supabase } from '../src/supabaseClient';
 //import { authService } from './auth';
 //[import type  { User, AuthError } from '@supabase/supabase-js';
 // Global DOM elements (will be set when DOM is ready)
