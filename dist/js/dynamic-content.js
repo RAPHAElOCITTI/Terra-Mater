@@ -1,8 +1,8 @@
 // public/js/dynamic-content.js
 
 // Import Supabase client from CDN
-const supabaseUrl = VITE_SUPABASE_URL;
-const supabaseAnonKey = VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = 'https://nwgopjqgwdbmbwzctads.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53Z29wanFnd2RibWJ3emN0YWRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1MDAwMDcsImV4cCI6MjA2ODA3NjAwN30.cd57Ldr86E44SkY77UdhKxY891BD-fltAC2mgcAcH_c';
 
 // Initialize Supabase client
 let supabase;

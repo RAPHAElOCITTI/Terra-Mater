@@ -1,8 +1,5 @@
 // src/admin.ts
-import { supabase } from './supabaseClient';
-import type {  ContentType } from './types';
-//import { authService } from './auth';
-//[import type  { User, AuthError } from '@supabase/supabase-js';
+import type { ContentType } from './types';
 
 // Global DOM elements (will be set when DOM is ready)
 let loginContainer: HTMLElement | null;
@@ -12,6 +9,8 @@ let emailInput: HTMLInputElement | null;
 let passwordInput: HTMLInputElement | null;
 let loginStatus: HTMLElement | null;
 let logoutBtn: HTMLButtonElement | null;
+
+let supabase: any;
 
 const contentTypes: ContentType[] = ['testimonials', 'blogs', 'faqs', 'projects', 'data_entries'];
 
@@ -340,6 +339,7 @@ const handleListClick = async (event: MouseEvent, type: ContentType): Promise<vo
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
+    supabase = (window as any).supabaseClient;
     // Get DOM elements after DOM is ready
     loginContainer = document.getElementById('login-container');
     adminDashboard = document.getElementById('admin-dashboard');

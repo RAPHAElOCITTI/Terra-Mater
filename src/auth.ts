@@ -1,9 +1,9 @@
 // src/auth.ts
-import { supabase } from './supabaseClient';
-import type { User, AuthError } from '@supabase/supabase-js';
+
+
 
 export interface AuthState {
-    user: User | null;
+    user: any | null;
     loading: boolean;
     error: string | null;
 }
@@ -23,11 +23,12 @@ export class AuthService {
         return AuthService.instance;
     }
 
-    async signIn(email: string, password: string): Promise<{ user: User | null; error: AuthError | null }> {
+    async signIn(email: string, password: string): Promise<{ user: any | null; error: any | null }> {
+        const supabaseClient = (window as any).supabaseClient;
         this.authState.loading = true;
         this.authState.error = null;
 
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
             email,
             password
         });
@@ -39,8 +40,9 @@ export class AuthService {
         return { user: data.user, error };
     }
 
-    async signOut(): Promise<{ error: AuthError | null }> {
-        const { error } = await supabase.auth.signOut();
+    async signOut(): Promise<{ error: any | null }> {
+        const supabaseClient = (window as any).supabaseClient;
+        const { error } = await supabaseClient.auth.signOut();
         
         if (!error) {
             this.authState.user = null;
@@ -50,9 +52,10 @@ export class AuthService {
         return { error };
     }
 
-    async getCurrentUser(): Promise<User | null> {
+    async getCurrentUser(): Promise<any | null> {
+        const supabaseClient = (window as any).supabaseClient;
         try {
-            const { data: { user }, error } = await supabase.auth.getUser();
+            const { data: { user }, error } = await supabaseClient.auth.getUser();
             
             if (error) {
                 console.error('Error getting current user:', error);
@@ -73,8 +76,9 @@ export class AuthService {
         return { ...this.authState };
     }
 
-    onAuthStateChange(callback: (user: User | null) => void) {
-        return supabase.auth.onAuthStateChange((_event, session) => {
+    onAuthStateChange(callback: (user: any | null) => void) {
+        const supabaseClient = (window as any).supabaseClient;
+        return supabaseClient.auth.onAuthStateChange((_event, session) => {
             const user = session?.user || null;
             this.authState.user = user;
             callback(user);

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terra Mater - Admin Panel</title>
-    <!--<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <link rel="stylesheet" href="../public/assets/css/admin.css">
     <style>
@@ -449,7 +449,14 @@
         </section>-->
     </div>
     
-    <script type="module" src="../dist/admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const supabaseUrl = 'https://nwgopjqgwdbmbwzctads.supabase.co';
+            const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53Z29wanFnd2RibWJ3emN0YWRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1MDAwMDcsImV4cCI6MjA2ODA3NjAwN30.cd57Ldr86E44SkY77UdhKxY891BD-fltAC2mgcAcH_c';
+            window.supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
+        });
+    </script>
+    <script type="module" src="../src/admin.ts"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         // --- Hamburger Menu Functionality ---

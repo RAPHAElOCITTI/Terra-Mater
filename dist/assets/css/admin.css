@@ -18,7 +18,7 @@
 body { 
     font-family: '29LT Zarid Text Light', 'Times New Roman', serif;
     background-color: var(--bg-light);
-    background-image: url('../background.jpg');
+    background-image: url('../images/background.jpg');
     background-size: cover;
     background-attachment: fixed;
     color: var(--font-light);
