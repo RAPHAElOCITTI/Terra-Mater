@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terra Mater - Admin Panel</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
-    <link rel="stylesheet" href="../public/assets/css/admin.css">
+    <link rel="stylesheet" href="/public/assets/css/admin.css">
     <style>
         /* Include consistent header styling */
         :root {
@@ -259,16 +258,16 @@
     <div class="scroll-progress"></div>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="../index.html" class="logo">Terra Mater</a>
+            <a href="/index.html" class="logo">Terra Mater</a>
             <button role="button" title="Menu Button" aria-label="Menu Button" id="hamburger-button" class="hamburger hamburger--spin" type="button" alt="Menu">
                 <span class="hamburger-box">
                     <span class="hamburger-inner"></span>
                 </span>
             </button>
             <ul class="nav-menu">
-                <li><a href="../index.html" class="nav-link">Home</a></li>
-                <li><a href="../index.html#about" class="nav-link">About</a></li>
-                <li><a href="../index.html#services" class="nav-link">Services</a></li>
+                <li><a href="/index.html" class="nav-link">Home</a></li>
+                <li><a href="/index.html#about" class="nav-link">About</a></li>
+                <li><a href="/index.html#services" class="nav-link">Services</a></li>
                 <li><a href="index.html#contact" class="nav-link">Contact</a></li>
                 <li><a href="#" class="nav-link">Admin</a></li>
             </ul>
@@ -449,14 +448,15 @@
         </section>-->
     </div>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const supabaseUrl = 'https://nwgopjqgwdbmbwzctads.supabase.co';
-            const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53Z29wanFnd2RibWJ3emN0YWRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1MDAwMDcsImV4cCI6MjA2ODA3NjAwN30.cd57Ldr86E44SkY77UdhKxY891BD-fltAC2mgcAcH_c';
-            window.supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
-        });
-    </script>
-    <script type="module" src="../src/admin.ts"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js"></script>
+<script>
+  window.supabaseClient = supabase.createClient(
+    "VITE_SUPABASE_URL",
+    "VITE_SUPABASE_ANON_KEY"
+  );
+</script>
+
+    <script type="module" src="/js/admin.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         // --- Hamburger Menu Functionality ---
@@ -480,6 +480,7 @@
             });
         }
   });
+
 </script>
 </body>
 </html>

@@ -1,25 +1,33 @@
-// src/admin.ts
-import type { ContentType } from './types';
+// src/admin.js
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+
+// ⚡ Replace with your actual values from Supabase dashboard
+const supabaseUrl = "https://nwgopjqgwdbmbwzctads.supabase.co";
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53Z29wanFnd2RibWJ3emN0YWRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1MDAwMDcsImV4cCI6MjA2ODA3NjAwN30.cd57Ldr86E44SkY77UdhKxY891BD-fltAC2mgcAcH_c";
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Global DOM elements (will be set when DOM is ready)
-let loginContainer: HTMLElement | null;
-let adminDashboard: HTMLElement | null;
-let loginForm: HTMLFormElement | null;
-let emailInput: HTMLInputElement | null;
-let passwordInput: HTMLInputElement | null;
-let loginStatus: HTMLElement | null;
-let logoutBtn: HTMLButtonElement | null;
+let loginContainer;
+let adminDashboard;
+let loginForm;
+let emailInput;
+let passwordInput;
+let loginStatus;
+let logoutBtn;
 
-let supabase: any;
 
-const contentTypes: ContentType[] = ['testimonials', 'blogs', 'faqs', 'projects', 'data_entries'];
+
+const contentTypes = ['testimonials', 'blogs', 'faqs', 'projects', 'data_entries'];
+
 
 // --- CORE FUNCTIONS ---
 
 /**
  * Checks the user's authentication state with Supabase.
  */
-const checkAuth = async (): Promise<void> => {
+const checkAuth = async () => {
     try {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
@@ -36,7 +44,7 @@ const checkAuth = async (): Promise<void> => {
 /**
  * Shows the admin dashboard and loads content.
  */
-const showDashboard = (): void => {
+const showDashboard = () => {
     if (loginContainer && adminDashboard) {
         loginContainer.classList.add('hidden');
         adminDashboard.classList.remove('hidden');
@@ -49,7 +57,7 @@ const showDashboard = (): void => {
 /**
  * Shows the login form and hides the dashboard.
  */
-const showLogin = (): void => {
+const showLogin = () => {
     if (loginContainer && adminDashboard) {
         loginContainer.classList.remove('hidden');
         adminDashboard.classList.add('hidden');
@@ -61,9 +69,8 @@ const showLogin = (): void => {
 
 /**
  * Handles user login.
- * @param event The form submission event.
  */
-const handleLogin = async (event: Event): Promise<void> => {
+const handleLogin = async (event) => {
     event.preventDefault();
 
     if (!emailInput || !passwordInput || !loginStatus) return;
@@ -87,7 +94,7 @@ const handleLogin = async (event: Event): Promise<void> => {
 /**
  * Handles user logout.
  */
-const handleLogout = async (): Promise<void> => {
+const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
         console.error('Logout failed:', error.message);
@@ -98,26 +105,25 @@ const handleLogout = async (): Promise<void> => {
 
 /**
  * Fetches and renders the list of items for a given content type.
- * @param type The content type ('testimonials', 'blogs', 'faqs', 'projects', 'data_entries').
  */
 const selectMap = {
-  testimonials: 'id, quote, author, created_at',
-  blogs: 'id, title, created_at',
-  faqs: 'id, question, created_at',
-  projects: 'id, name, location, created_at',
-  data_entries: 'id, project_id, data, created_at, projects(name)'
-} as const;
+    testimonials: 'id, quote, author, created_at',
+    blogs: 'id, title, created_at',
+    faqs: 'id, question, created_at',
+    projects: 'id, name, location, created_at',
+    data_entries: 'id, project_id, data, created_at, projects(name)'
+};
 
-const renderList = async (type: ContentType): Promise<void> => {
-  const listElement = document.getElementById(`${type}-list`) as HTMLTableSectionElement | null;
-  if (!listElement) return;
+const renderList = async (type) => {
+    const listElement = document.getElementById(`${type}-list`);
+    if (!listElement) return;
 
-  const select = selectMap[type];
+    const select = selectMap[type];
 
-  const { data, error } = await supabase
-    .from(type)
-    .select(select)               // returns FilterBuilder
-    .order('created_at', { ascending: false });
+    const { data, error } = await supabase
+        .from(type)
+        .select(select)
+        .order('created_at', { ascending: false });
 
     if (error) {
         console.error(`Error loading ${type}:`, error);
@@ -125,9 +131,9 @@ const renderList = async (type: ContentType): Promise<void> => {
     }
 
     listElement.innerHTML = '';
-    data.forEach((item: any) => {
+    data.forEach((item) => {
         const row = document.createElement('tr');
-        
+
         if (type === 'testimonials') {
             row.innerHTML = `
                 <td>${item.id}</td>
@@ -166,7 +172,9 @@ const renderList = async (type: ContentType): Promise<void> => {
                 </td>
             `;
         } else if (type === 'data_entries') {
-            const dataPreview = typeof item.data === 'object' ? JSON.stringify(item.data).substring(0, 30) + '...' : String(item.data).substring(0, 30) + '...';
+            const dataPreview = typeof item.data === 'object'
+                ? JSON.stringify(item.data).substring(0, 30) + '...'
+                : String(item.data).substring(0, 30) + '...';
             const projectName = item.projects?.name || 'Unknown Project';
             const createdDate = new Date(item.created_at).toLocaleDateString();
             row.innerHTML = `
@@ -180,11 +188,10 @@ const renderList = async (type: ContentType): Promise<void> => {
                 </td>
             `;
         }
-        
+
         listElement.appendChild(row);
     });
-    
-    // Load projects for data_entries dropdown if needed
+
     if (type === 'data_entries') {
         await loadProjectsDropdown();
     }
@@ -193,8 +200,8 @@ const renderList = async (type: ContentType): Promise<void> => {
 /**
  * Loads projects for the dropdown in data entries form.
  */
-const loadProjectsDropdown = async (): Promise<void> => {
-    const dropdown = document.getElementById('data-entry-project') as HTMLSelectElement | null;
+const loadProjectsDropdown = async () => {
+    const dropdown = document.getElementById('data-entry-project');
     if (!dropdown) return;
 
     const { data, error } = await supabase
@@ -207,9 +214,8 @@ const loadProjectsDropdown = async (): Promise<void> => {
         return;
     }
 
-    // Keep the first option and add projects
     dropdown.innerHTML = '<option value="">Select Project...</option>';
-    data.forEach((project: any) => {
+    data.forEach((project) => {
         const option = document.createElement('option');
         option.value = project.id;
         option.textContent = project.name;
@@ -219,23 +225,21 @@ const loadProjectsDropdown = async (): Promise<void> => {
 
 /**
  * Handles form submissions for creating/updating content.
- * @param type The content type.
  */
-const setupFormHandler = (type: ContentType): void => {
-    const formElement = document.getElementById(`${type}-form`) as HTMLFormElement | null;
+const setupFormHandler = (type) => {
+    const formElement = document.getElementById(`${type}-form`);
     if (!formElement) return;
 
     formElement.addEventListener('submit', async (event) => {
         event.preventDefault();
 
         const formData = new FormData(formElement);
-        const data: { [key: string]: any } = {};
+        const data = {};
         formData.forEach((value, key) => data[key] = value);
 
         const id = data.id;
         delete data.id;
 
-        // Handle JSON fields for data_entries
         if (type === 'data_entries') {
             try {
                 data.data = JSON.parse(data.data);
@@ -248,7 +252,6 @@ const setupFormHandler = (type: ContentType): void => {
             }
         }
 
-        // Add created_by for new projects and data_entries
         if (!id && (type === 'projects' || type === 'data_entries')) {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
@@ -257,7 +260,6 @@ const setupFormHandler = (type: ContentType): void => {
         }
 
         if (id) {
-            // Update an existing item
             const { error } = await supabase.from(type).update(data).eq('id', id);
             if (error) {
                 console.error(`Error updating ${type.slice(0, -1)}:`, error);
@@ -266,7 +268,6 @@ const setupFormHandler = (type: ContentType): void => {
                 alert(`Successfully updated ${type.slice(0, -1)}!`);
             }
         } else {
-            // Insert a new item
             const { error } = await supabase.from(type).insert([data]);
             if (error) {
                 console.error(`Error inserting ${type.slice(0, -1)}:`, error);
@@ -282,45 +283,42 @@ const setupFormHandler = (type: ContentType): void => {
 
 /**
  * Handles edit and delete actions on the list.
- * @param event The click event.
- * @param type The content type.
  */
-const handleListClick = async (event: MouseEvent, type: ContentType): Promise<void> => {
-    const target = event.target as HTMLElement;
+const handleListClick = async (event, type) => {
+    const target = event.target;
     const id = target.getAttribute('data-id');
     const action = target.getAttribute('data-action');
 
     if (!id || !action) return;
 
     if (action === 'edit') {
-        // Fetch the item and pre-fill the form
         const { data, error } = await supabase.from(type).select('*').eq('id', id).single();
         if (error) {
             console.error(`Error fetching item for edit:`, error);
             return;
         }
-        const form = document.getElementById(`${type}-form`) as HTMLFormElement | null;
+        const form = document.getElementById(`${type}-form`);
         if (form) {
-            (form.elements.namedItem('id') as HTMLInputElement).value = id;
+            form.elements.namedItem('id').value = id;
             if (type === 'testimonials') {
-                (form.elements.namedItem('quote') as HTMLInputElement).value = data.quote;
-                (form.elements.namedItem('author') as HTMLInputElement).value = data.author;
+                form.elements.namedItem('quote').value = data.quote;
+                form.elements.namedItem('author').value = data.author;
             } else if (type === 'blogs') {
-                (form.elements.namedItem('title') as HTMLInputElement).value = data.title;
-                (form.elements.namedItem('excerpt') as HTMLTextAreaElement).value = data.excerpt;
-                (form.elements.namedItem('content') as HTMLTextAreaElement).value = data.content;
-                (form.elements.namedItem('link') as HTMLInputElement).value = data.link;
+                form.elements.namedItem('title').value = data.title;
+                form.elements.namedItem('excerpt').value = data.excerpt;
+                form.elements.namedItem('content').value = data.content;
+                form.elements.namedItem('link').value = data.link;
             } else if (type === 'faqs') {
-                (form.elements.namedItem('question') as HTMLInputElement).value = data.question;
-                (form.elements.namedItem('answer') as HTMLTextAreaElement).value = data.answer;
+                form.elements.namedItem('question').value = data.question;
+                form.elements.namedItem('answer').value = data.answer;
             } else if (type === 'projects') {
-                (form.elements.namedItem('name') as HTMLInputElement).value = data.name;
-                (form.elements.namedItem('description') as HTMLTextAreaElement).value = data.description || '';
-                (form.elements.namedItem('location') as HTMLInputElement).value = data.location || '';
+                form.elements.namedItem('name').value = data.name;
+                form.elements.namedItem('description').value = data.description || '';
+                form.elements.namedItem('location').value = data.location || '';
             } else if (type === 'data_entries') {
-                (form.elements.namedItem('project_id') as HTMLSelectElement).value = data.project_id;
-                (form.elements.namedItem('data') as HTMLTextAreaElement).value = JSON.stringify(data.data, null, 2);
-                (form.elements.namedItem('metadata') as HTMLTextAreaElement).value = data.metadata ? JSON.stringify(data.metadata, null, 2) : '';
+                form.elements.namedItem('project_id').value = data.project_id;
+                form.elements.namedItem('data').value = JSON.stringify(data.data, null, 2);
+                form.elements.namedItem('metadata').value = data.metadata ? JSON.stringify(data.metadata, null, 2) : '';
             }
         }
     } else if (action === 'delete') {
@@ -339,17 +337,16 @@ const handleListClick = async (event: MouseEvent, type: ContentType): Promise<vo
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
-    supabase = (window as any).supabaseClient;
-    // Get DOM elements after DOM is ready
+    //supabase = window.supabaseClient;
+
     loginContainer = document.getElementById('login-container');
     adminDashboard = document.getElementById('admin-dashboard');
-    loginForm = document.getElementById('login-form') as HTMLFormElement;
-    emailInput = document.getElementById('email') as HTMLInputElement;
-    passwordInput = document.getElementById('password') as HTMLInputElement;
+    loginForm = document.getElementById('login-form');
+    emailInput = document.getElementById('email');
+    passwordInput = document.getElementById('password');
     loginStatus = document.getElementById('login-status');
-    logoutBtn = document.getElementById('logout-btn') as HTMLButtonElement;
+    logoutBtn = document.getElementById('logout-btn');
 
-    // Setup login/logout listeners
     if (loginForm) {
         loginForm.addEventListener('submit', handleLogin);
     }
@@ -357,7 +354,6 @@ document.addEventListener('DOMContentLoaded', () => {
         logoutBtn.addEventListener('click', handleLogout);
     }
 
-    // Setup form handlers and list click listeners for each content type
     contentTypes.forEach(type => {
         setupFormHandler(type);
         const listElement = document.getElementById(`${type}-list`);
@@ -366,6 +362,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Check initial auth state
     checkAuth();
 });
